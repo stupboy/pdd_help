@@ -5,19 +5,26 @@ chrome.extension.onMessage.addListener(
             // 获取页面内容
             // console.log(document)
             // 获取脚本节点
-            var obj  = $("body")["0"].childNodes[15].text
-            // 分割字符串获取rawData
-            var str = obj.split("window.rawData= ")
-            var rawDataString = str[1]
-            // 去除字符串空格
-            var rawDataString = rawDataString.replace(/\s*/g,"");
-            // 字符串转json
-            var rawData = eval('(' + rawDataString.substring(0,rawDataString.length - 1) + ')')
-            console.log(rawData)
-            if (str[1].length > 0) {
-                if (sendResponse) sendResponse(rawData);
-            } else {
-                alert("获取商品信息错误");
+            try{
+                var obj  = $("body")["0"].childNodes[15].text
+                // 分割字符串获取rawData
+                var str = obj.split("window.rawData= ")
+                var rawDataString = str[1]
+                // 去除字符串空格
+                var rawDataString = rawDataString.replace(/\s*/g,"");
+                // 字符串转json
+                var rawData = eval('(' + rawDataString.substring(0,rawDataString.length - 1) + ')')
+                console.log(rawData)
+                if (str[1].length > 0) {
+                    if (sendResponse) sendResponse(rawData);
+                } else {
+                    alert("获取商品信息错误");
+                }
+            }
+            catch(err){
+                // 商品详情页面 rawData 为17
+                // console.log($("body")["0"].childNodes[17].text)
+                alert("商品信息不存在")
             }
         } else if (request.action === "paste") {
             var ctrl = $("#input");
